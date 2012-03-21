@@ -33,22 +33,20 @@ def parse_page(urlstring):
     for iblock, tblock in zip(infoblocks,titleblocks):
         icontents = iblock.contents
         tcontents = tblock.contents
-        try:
-            age       = age_from_string(icontents[3])
-        except IndexError:
-            continue
+
+        try: age = age_from_string(icontents[3])
+        except IndexError: continue
+
+        try: comments = str_to_num(icontents[4].contents[0])
+        except ValueError: comments = 0
+
+        try: site  = tcontents[1].contents[0][2:-2]
+        except (IndexError, AttributeError): site  = ""
+        
         subtime = datetime.now() - timedelta(minutes=age)
-        try:
-            comments = str_to_num(icontents[4].contents[0])
-        except ValueError:
-            comments = 0
-        user      = icontents[2].contents[0]
-        score     = str_to_num(icontents[0].contents[0])
-        title     = tcontents[0].contents[0]
-        try:
-            site  = tcontents[1].contents[0][2:-2]
-        except (IndexError,AttributeError):
-            site  = ""
+        user    = icontents[2].contents[0]
+        score   = str_to_num(icontents[0].contents[0])
+        title   = tcontents[0].contents[0]
         posts.append({'age':age, 
                       'time':subtime,
                       'comments':comments,
@@ -66,6 +64,7 @@ def parse_gen(n):
         yield posts
         curr_url = nextpage
 
+# example usage follows
 print "Please enter the number of pages you would like parsed."
 n = int(raw_input())
 print list(parse_gen(n))
