@@ -41,8 +41,8 @@ def parse_page(urlstring):
         except ValueError: comments = 0
 
         try: site  = tcontents[1].contents[0][2:-2]
-        except (IndexError, AttributeError): site  = ""
-        
+        except (IndexError, AttributeError): site = ""
+
         subtime = datetime.now() - timedelta(minutes=age)
         user    = icontents[2].contents[0]
         score   = str_to_num(icontents[0].contents[0])
